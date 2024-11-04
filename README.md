@@ -1,7 +1,16 @@
 # ZKURE : VC Gated Dapp
 
+Schema Hash
+The Schema Hash is a unique identifier for a Claim Schema. It is derived by hashing the string that represents unique identifier @id of the Claim Schema type. In the previous example, the hash pre-image is the string https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v4.jsonld#KYCAgeCredential. ` For example, in the case of the Auth Claim the schema hash would be
+
+
+var sHash core.SchemaHash
+h := Keccak256([]byte("https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v4.jsonld#KYCAgeCredential"))
+copy(sHash[:], h[len(h)-16:])
+sHashHex, _ := sHash.MarshalText()
+fmt.Println(string(sHashHex))
+
 '''
-module.exports = {
 
     // 1. VaccinationRecordCredential
     // This credential verifies that an individual has received a specific vaccination, such as COVID-19 or influenza.
