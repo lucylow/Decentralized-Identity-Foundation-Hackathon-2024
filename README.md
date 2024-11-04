@@ -10,6 +10,73 @@ copy(sHash[:], h[len(h)-16:])
 sHashHex, _ := sHash.MarshalText()
 fmt.Println(string(sHashHex))
 
+
+For ZKure’s vaccination record example, you can design a Zero-Knowledge Proof (ZKP) circuit that verifies whether a user has received a specific vaccine without revealing any further personal details. In this example, the user could prove they have been vaccinated for a specific disease, such as COVID-19, without revealing the date, location, or other vaccination details.
+
+### Example: Vaccination Record Verification Circuit in Circom
+
+Here’s how a simple vaccination record verification circuit might look in **Circom**:
+
+```javascript
+pragma circom 2.0.0;
+
+template VaccinationVerifier {
+    signal input vaccineReceived;   // 1 if the user has received the vaccine, 0 otherwise
+    signal input requiredVaccine;   // 1 if the specific vaccine is required for verification
+    signal output isVaccinated;     // Output signal to indicate vaccination verification
+
+    // Check if the vaccine received matches the required vaccine status
+    isVaccinated <== (vaccineReceived == requiredVaccine) ? 1 : 0;
+}
+
+// Instantiate the circuit
+component main = VaccinationVerifier();
+```
+
+### Explanation
+
+1. **Inputs**:
+   - `vaccineReceived`: A private input indicating whether the user has received the vaccine (1 if vaccinated, 0 if not).
+   - `requiredVaccine`: A public input specifying whether this particular vaccine is required (e.g., 1 for COVID-19).
+
+2. **Logic**:
+   - The circuit compares `vaccineReceived` with `requiredVaccine`. If they match, `isVaccinated` outputs `1` (indicating vaccination proof is met).
+   - If not, `isVaccinated` outputs `0`.
+
+3. **Output**:
+   - `isVaccinated` is a binary output, returning `1` if the user is vaccinated according to the requirement, and `0` otherwise.
+
+### Using the Circuit
+
+1. **Compile**:
+   Compile the circuit with `circom`:
+   ```bash
+   circom VaccinationVerifier.circom --r1cs --wasm --sym --c
+   ```
+
+2. **Generate Proof**:
+   Generate a proof using **SnarkJS** by specifying the vaccination status:
+   ```javascript
+   const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+       { "vaccineReceived": 1, "requiredVaccine": 1 },
+       "VaccinationVerifier.wasm",
+       "VaccinationVerifier_final.zkey"
+   );
+   ```
+
+3. **Verify Proof**:
+   The generated proof can be verified by a smart contract or off-chain application, confirming the vaccination status without exposing any additional details about the user’s health or personal records.
+
+### Customization and Expansion
+
+For ZKure, this basic circuit could be expanded to handle additional verification requirements, such as:
+- Multiple vaccines or boosters
+- Verification for different types of vaccines (e.g., flu, COVID-19)
+- Additional inputs or signals for data privacy, such as an encrypted user ID or vaccination batch identifier (without revealing it). 
+
+This circuit can serve as a secure foundation for building privacy-preserving vaccination verification in ZKure.
+
+
 '''
 
     // 1. VaccinationRecordCredential
