@@ -2,9 +2,11 @@
 
 '''
 module.exports = {
+
     // 1. VaccinationRecordCredential
     // This credential verifies that an individual has received a specific vaccination, such as COVID-19 or influenza.
     // It can be used to confirm immunization status for travel, work, or healthcare access.
+    
     VaccinationRecordCredential: (credentialSubject) => ({
       id: 1,
       circuitId: 'credentialAtomicQuerySigV2',
