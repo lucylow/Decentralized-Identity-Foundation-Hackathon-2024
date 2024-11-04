@@ -1,6 +1,7 @@
 # ZKURE : VC Gated Dapp
 
 '''
+
 module.exports = {
     // 1. VaccinationRecordCredential
     // This credential verifies that an individual has received a specific vaccination, such as COVID-19 or influenza.
